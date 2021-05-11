@@ -1,0 +1,65 @@
+#include <iostream>
+using namespace std;
+template <class T>
+class Array {
+public:
+	T* array;
+	int arr_size;
+	Array() {}
+	Array(int size){
+		arr_size = size;
+		array = new T[size];
+	}
+	void fill_arr() {
+		for (int i = 0; i < arr_size; i++) {
+			array[i] = i + 1;
+		}
+	}
+	void print_arr() {
+		for (int i = 0; i < arr_size; i++) {
+			cout << array[i] << " ";
+		}
+		cout << endl;
+	}
+	friend Array& operator+(const Array& array, const int& bias)
+	{
+		Array new_array(array.arr_size);
+		for (int i = 0; i < array.arr_size; i++)
+		{
+			new_array.array[i] = array.array[i];
+		}
+ 
+		for (int i = 0; i < bias; i++) {
+			T temp = new_array.array[new_array.arr_size - 1];
+			for (int i = new_array.arr_size - 1; i > 0 ; i--) {
+				T test = new_array.array[i - 1];
+				new_array.array[i] = new_array.array[i - 1];
+			}
+			new_array.array[0] = temp;
+		}
+		return new_array;
+	}
+	friend Array& operator-(const Array& array, const int& bias)
+	{
+		Array new_array(array.arr_size);
+		for (int i = 0; i < array.arr_size; i++)
+		{
+			new_array.array[i] = array.array[i];
+		}
+		for (int i = 0; i < bias; i++) {
+			T temp = new_array.array[0];
+			for (int i = 0; i < new_array.arr_size - 1; i++) {
+				new_array.array[i] = new_array.array[i + 1];
+			}
+			new_array.array[new_array.arr_size - 1] = temp;
+		}
+		return new_array;
+	}
+};
+int main() {
+	Array<int> array1(5);
+	array1.fill_arr();
+	array1.print_arr();
+	Array<int> array2 = array1 - 11;
+	array2.print_arr();
+}
