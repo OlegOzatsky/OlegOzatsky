@@ -1,0 +1,90 @@
+#include <string>
+#include <iostream>
+ 
+using namespace std;
+ 
+int getInt();
+ 
+struct Block {
+    string name;
+    int type;
+    Block* point1, * point2;
+    void point() {
+        if (point1 || point2) {
+            if (type != 2)
+                cout << "Мое имя: " << name << " Мои указатели: " << point1->name << ", " << point2->name << endl;
+            else
+                cout << "Мое имя: " << name << " Мои указатели: пустые" << endl;
+ 
+        }
+        else
+            cout << "Мое имя: " << name << " Мои указатели: пустые" << endl;
+    }
+};
+ 
+struct Tree {
+public:
+    Tree(int levels) {
+        this->levels = levels;
+ 
+        numberOfBlocks = 2 * levels + 1;
+ 
+        blocks = new Block[numberOfBlocks];
+        blocks[0] = { "Объект 1", 1 };
+ 
+        for (int i = 1; i < numberOfBlocks - 1; i++)
+            if (i % 2 == 1) {
+                blocks[i] = { "Объект " + to_string(i + 1), 2 };
+            }
+            else {
+                blocks[i] = { "Объект " + to_string(i + 1), 1 };
+            }
+        blocks[numberOfBlocks - 1] = { "Объект " + to_string(numberOfBlocks), 2 };
+        for (int i = 0; i < numberOfBlocks; i++) {
+            if (i % 2 == 0 && i != numberOfBlocks) {
+                blocks[i].point1 = &blocks[i + 1];
+                blocks[i].point2 = &blocks[i + 2];
+            }
+        }
+    }
+    void print() {
+        for (int i = 0; i < numberOfBlocks; i++)
+            blocks[i].point();
+    }
+private:
+    int levels;
+    int numberOfBlocks;
+    Block* blocks;
+};
+ 
+int main() {
+    setlocale(LC_ALL, "Ru");
+    int levels = 0;
+    cout << "Введите количество уровней дерева: ";
+    while (true) {
+        levels = getInt();
+        if (levels < 0) {
+            cout << "Количество уровней должно быть больще 0: ";
+            continue;
+        }
+        else
+            break;
+    }
+    Tree tree(levels);
+    tree.print();
+}
+ 
+int getInt()
+{
+    int number;
+    while (true) {
+        cin >> number;
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(32767, '\n');
+            cout << "Do input again." << endl;
+        }
+        else
+            return number;
+    }
+}
