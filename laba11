@@ -1,0 +1,130 @@
+#include <iostream>
+#include <math.h>
+ 
+using namespace std;
+ 
+double getDouble();
+ 
+class Complex {
+public:
+    void setComplex();
+    void printComplexNumber();
+    Complex operator+(Complex number);
+    Complex operator-(Complex number);
+private:
+    double a, b;
+};
+ 
+void Complex::setComplex() {
+    cout << "Complex number is a + b * i" << endl;;
+    cout << "Enter a: ";
+    a = getDouble();
+    cout << "Enter b: ";
+    b = getDouble();
+ 
+}
+ 
+void Complex::printComplexNumber() {
+    cout << a << " + " << b << " * i";
+}
+ 
+Complex Complex::operator+(Complex number)
+{
+    Complex result;
+    result.a = a + number.a;
+    result.b = b + number.b;
+    return result;
+}
+ 
+Complex Complex::operator-(Complex number)
+{
+    Complex result;
+    result.a = a - number.a;
+    result.b = b - number.b;
+    return result;
+}
+ 
+class ComplexVector {
+public: 
+    void setComplexVector();
+    void printComplexVector();
+    ComplexVector operator+(ComplexVector vect);
+    ComplexVector operator-(ComplexVector vect);
+private:
+    Complex component[3];
+};
+ 
+void ComplexVector::setComplexVector() {
+    for (int i = 0; i < 3; i++) {
+        component[i].setComplex();
+    }
+}
+ 
+void ComplexVector::printComplexVector()
+{
+    cout << "(";
+    for (int i = 0; i < 3; i++) {
+        component[i].printComplexNumber();
+        if (i != 2)
+            cout << ", ";
+    }
+    cout << ")";
+}
+ 
+ComplexVector ComplexVector::operator+(ComplexVector vect)
+{
+    ComplexVector result;
+    for (int i = 0; i < 3; i++) {
+        result.component[i] = component[i] + vect.component[i];
+    }
+    return result;
+}
+ 
+ComplexVector ComplexVector::operator-(ComplexVector vect)
+{
+    ComplexVector result;
+    for (int i = 0; i < 3; i++) {
+        result.component[i] = component[i] - vect.component[i];
+    }
+    return result;
+}
+ 
+ 
+int main() {
+    ComplexVector vect1, vect2, result;
+    cout << "Enter 1st vector (x,y,z):" << endl;
+    vect1.setComplexVector();
+    cout << "Enter 2nd vector (x,y,z):" << endl;
+    vect2.setComplexVector();
+    vect1.printComplexVector(); 
+    cout << " + ";
+    vect2.printComplexVector();
+    cout << " = ";
+    result = vect1 + vect2;
+    result.printComplexVector();
+    cout << endl;
+    vect1.printComplexVector();
+    cout << " - ";
+    vect2.printComplexVector();
+    cout << " = ";
+    result = vect1 - vect2;
+    result.printComplexVector();
+    return 0;
+}
+ 
+double getDouble() {
+    while (true) {
+        double number;
+        cin >> number;
+ 
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(32767, '\n');
+            cout << "Do input again." << endl;
+        }
+        else {
+            cin.ignore(32767, '\n');
+            return number;
+        }
+    }
+}
