@@ -1,0 +1,114 @@
+#include <iostream>
+#include <math.h>
+ 
+using namespace std;
+ 
+double getDouble();
+int getInt();
+ 
+class qnx {
+public:
+    qnx operator+(qnx number);
+    qnx operator-(qnx number);
+    void setData();
+    void printResult();
+private:
+    void solve();
+    double result = 0;
+    double* ak;
+    double x;
+    int n;
+};
+ 
+qnx qnx::operator+(qnx number)
+{
+    qnx result;
+    result.result = this->result + number.result;
+    return result;
+}
+ 
+qnx qnx::operator-(qnx number)
+{
+    qnx result;
+    result.result = this->result - number.result;
+    return result;
+}
+ 
+void qnx::setData() {
+    cout << "Enter x: ";
+    x = getDouble();
+    cout << "Enter n (must be Int): ";
+    n = getInt();
+    ak = new double[n];
+    cout << "Enter " << n << " ak: " << endl;
+    for (int i = 0; i < n; i++) {
+        ak[i] = getDouble();
+    }
+    solve();
+}
+ 
+void qnx::printResult()
+{
+    cout << result; 
+}
+ 
+void qnx::solve() {
+    for (int i = 0; i < n; i++) {
+        result += ak[i] * exp(-i * x);
+    }
+}
+ 
+int main() {
+    qnx first, second, result;
+    first.setData();
+    second.setData();
+    system("cls");
+    first.printResult();
+    cout << " + ";
+    second.printResult();
+    cout << " = ";
+    result = first + second;
+    result.printResult();
+    cout << endl;
+    first.printResult();
+    cout << " - ";
+    second.printResult();
+    cout << " = ";
+    result = first - second;
+    result.printResult();
+    return 0;
+}
+ 
+double getDouble() {
+    while (true) {
+        double number;
+        cin >> number;
+ 
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(32767, '\n');
+            cout << "Do input again." << endl;
+        }
+        else {
+            cin.ignore(32767, '\n');
+            return number;
+        }
+    }
+}
+ 
+int getInt() {
+    while (true) {
+        int number;
+        cin >> number;
+ 
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(32767, '\n');
+            cout << "Do input again." << endl;
+        }
+        else {
+            cin.ignore(32767, '\n');
+            return number;
+        }
+    }
+}
