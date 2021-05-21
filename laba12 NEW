@@ -1,0 +1,82 @@
+#include <iostream> 
+#include <string> 
+using namespace std; 
+template<class T> class Array; 
+template<class A> Array<A> operator+(const Array<A>& classObj, const int& bias); 
+template<class A> Array<A> operator-(const Array<A>& classObj, const int& bias); 
+template<class T> 
+class Array { 
+public: 
+ T* arr; 
+ int arr_size; 
+ ~Array() { 
+ delete[] arr; 
+	}
+public:
+	Array() {
+		arr = nullptr;
+		arr_size = 0;
+	}
+	Array(const Array& copy, int bias, string direction) {
+		this->arr_size = copy.arr_size;
+		this->arr = new T[copy.arr_size];
+		for (int i = 0; i < this->arr_size; i++)
+		{
+			this->arr[i] = copy.arr[i];
+		}
+		if (direction == "right") {
+			for (int i = 0; i < bias; i++) {
+				T temp = this->arr[this->arr_size - 1];
+				for (int i = this->arr_size - 1; i > 0; i--) {
+					T test = this->arr[i - 1];
+					this->arr[i] = this->arr[i - 1];
+				}
+				this->arr[0] = temp;
+			}
+		}
+		if (direction == "left") {
+			for (int i = 0; i < bias; i++) {
+				T temp = this->arr[0];
+				for (int i = 0; i < this->arr_size - 1; i++) {
+					this->arr[i] = this->arr[i + 1];
+				}
+				this->arr[this->arr_size - 1] = temp;
+			}
+		}
+	}
+	void fill_arr() {
+		for (int i = 0; i < this->arr_size; i++) {
+			this->arr[i] = i + 1;
+		}
+	}
+	void print_arr() {
+		for (int i = 0; i < this->arr_size; i++) {
+			cout << this->arr[i] << " ";
+		}
+		cout << endl;
+	}
+	Array(int size) {
+		this->arr_size = size;
+		this->arr = new T[size];
+	}
+	template <class A>
+	friend Array<A> operator+(const Array<A>& classObj, const int& bias);
+	template <class A>
+	friend Array<A> operator-(const Array<A>& classObj, const int& bias);
+};
+template <class T>
+Array<T> operator+(const Array<T>& classObj, const int& bias) {
+	return Array<T>(classObj, bias, "right");
+}
+template<class T>
+Array<T> operator-(const Array<T>& classObj, const int& bias) {
+	return Array<T>(classObj, bias, "left");
+}
+int main() {
+	Array<int> a(5);
+	a.fill_arr();
+	a.print_arr();
+	Array<int> b = a - 1;
+	b.print_arr();
+	return 0;
+}
